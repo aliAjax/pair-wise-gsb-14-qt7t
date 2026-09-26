@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
+import BatchAdjustPage from "./features/batch/BatchAdjustPage.vue";
+
+const activeTab = ref<"single" | "batch">("single");
 
 type Field = {
   key: string;
@@ -205,6 +208,12 @@ function remove(id: string) {
         </div>
       </header>
 
+      <nav class="tabs">
+        <button type="button" class="tab" :class="{ active: activeTab === 'single' }" @click="activeTab = 'single'">逐条维护</button>
+        <button type="button" class="tab" :class="{ active: activeTab === 'batch' }" @click="activeTab = 'batch'">批量调价</button>
+      </nav>
+
+      <template v-if="activeTab === 'single'">
       <section class="metrics">
         <article v-for="(label, index) in project.metricLabels" :key="label" class="metric">
           <span>{{ label }}</span>
@@ -268,6 +277,9 @@ function remove(id: string) {
           </div>
         </section>
       </section>
+      </template>
+
+      <BatchAdjustPage v-else />
     </div>
   </main>
 </template>
